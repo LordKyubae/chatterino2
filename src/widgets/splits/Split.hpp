@@ -184,6 +184,7 @@ public Q_SLOTS:
     void clear();
     void openInBrowser();
     void openModViewInBrowser();
+    void clearObs();
     void openWhispersInBrowser();
     void openBrowserPlayer();
     void openInStreamlink();

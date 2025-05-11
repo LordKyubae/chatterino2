@@ -58,3 +58,6 @@
 [submodule "lib/twitch-eventsub-ws/lib/fmt"]
 	path = lib/twitch-eventsub-ws/lib/fmt
 	url = https://github.com/fmtlib/fmt
+[submodule "lib/ixwebsocket"]
+	path = lib/ixwebsocket
+	url = https://github.com/machinezone/IXWebSocket.git

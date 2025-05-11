@@ -266,6 +266,8 @@ public:
     };
 
     /// Behaviour
+    QStringSetting webSocketAddress = {"/websocket/address", "ws://localhost:3000"};
+
     BoolSetting allowDuplicateMessages = {"/behaviour/allowDuplicateMessages",
                                           true};
     BoolSetting mentionUsersWithAt = {"/behaviour/mentionUsersWithAt", false};

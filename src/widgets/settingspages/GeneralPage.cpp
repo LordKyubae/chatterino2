@@ -493,6 +493,10 @@ void GeneralPage::initLayout(GeneralPageView &layout)
         ->addKeywords({"scroll bar"})
         ->addTo(layout);
 
+    layout.addTitle("WebSocket");
+
+    SettingWidget::lineEdit("Address", s.webSocketAddress, "ws://localhost:3000")->setTooltip("The WebSocket server to send chat data to.")->addTo(layout);
+
     layout.addTitle("Messages");
 
     SettingWidget::checkbox("Separate with lines", s.separateMessages)
@@ -1379,7 +1383,7 @@ void GeneralPage::initLayout(GeneralPageView &layout)
 
     // invisible element for width
     auto *inv = new BaseWidget(this);
-    //    inv->setScaleIndependentWidth(600);
+    //    inv->setScaleIndependantWidth(600);
     layout.addWidget(inv);
 }
 

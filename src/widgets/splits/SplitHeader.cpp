@@ -485,6 +485,10 @@ std::unique_ptr<QMenu> SplitHeader::createMainMenu()
         menu->addAction("Reload subscriber emotes",
                         subSeq.isEmpty() ? bothSeq : subSeq, this,
                         &SplitHeader::reloadSubscriberEmotes);
+
+        menu->addSeparator();
+
+        menu->addAction("Clear OBS",h->getDisplaySequence(HotkeyCategory::Split, "clearObs"),this->split_, &Split::clearObs);
     }
 
     menu->addSeparator();

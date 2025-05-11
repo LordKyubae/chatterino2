@@ -57,6 +57,8 @@ set(SOURCE_FILES
         common/network/NetworkTask.cpp
         common/network/NetworkTask.hpp
 
+        common/websockets/WebSocketClient.cpp
+        common/websockets/WebSocketClient.hpp
         common/websockets/WebSocketPool.cpp
         common/websockets/WebSocketPool.hpp
         common/websockets/detail/WebSocketConnection.cpp
@@ -491,6 +493,8 @@ set(SOURCE_FILES
         singletons/Updates.hpp
         singletons/WindowManager.cpp
         singletons/WindowManager.hpp
+        singletons/WebSocketManager.cpp
+        singletons/WebSocketManager.hpp
 
         singletons/helper/GifTimer.cpp
         singletons/helper/GifTimer.hpp
@@ -823,6 +827,7 @@ if (CHATTERINO_GENERATE_COVERAGE)
         EXCLUDE "lib/sol2/*"
         EXCLUDE "lib/websocketpp/*"
         EXCLUDE "lib/WinToast/*"
+        EXCLUDE "lib/ixwebsocket/*"
 
         EXCLUDE "*/ui_*.h"
         EXCLUDE "*/moc_*.cpp"
@@ -850,6 +855,7 @@ target_link_libraries(${LIBRARY_PROJECT}
         $<$<BOOL:${WIN32}>:Wtsapi32>
         twitch-eventsub-ws
         BoostCertify
+        ixwebsocket
         )
 if (CHATTERINO_PLUGINS)
     target_link_libraries(${LIBRARY_PROJECT} PUBLIC lua sol2::sol2)

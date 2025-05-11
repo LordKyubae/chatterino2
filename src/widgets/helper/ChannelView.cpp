@@ -46,10 +46,11 @@
 #include "widgets/splits/SplitInput.hpp"
 #include "widgets/TooltipWidget.hpp"
 #include "widgets/Window.hpp"
+#include "common/websockets/WebSocketClient.hpp"
+#include "singletons/WebSocketManager.hpp"
 
 #include <magic_enum/magic_enum_flags.hpp>
 #include <QApplication>
-#include <QClipboard>
 #include <QColor>
 #include <QDate>
 #include <QDebug>
@@ -60,7 +61,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QPainter>
-#include <QScreen>
+#include <QMessageBox>
 #include <QVariantAnimation>
 
 #include <algorithm>
@@ -2555,9 +2556,24 @@ void ChannelView::addContextMenuItems(
     menu->raise();
 }
 
-void ChannelView::addMessageContextMenuItems(QMenu *menu,
-                                             const MessageLayoutPtr &layout)
-{
+void ChannelView::addMessageContextMenuItems(QMenu *menu, const MessageLayoutPtr &layout) {
+    menu->addAction("Send to OBS", [this, layout] {
+        auto& manager = WebSocketManager::instance();
+
+        const auto &messagePtr = layout->getMessagePtr();
+        const QString jsonString = QJsonDocument(messagePtr->toJson()).toJson(QJsonDocument::Compact);
+
+        const auto channel = this->channel_;
+        if (!channel) {
+            qDebug() << "No channel found";
+            return;
+        }
+        const std::string channelName{channel->getName().toUtf8()};
+
+        manager.connectToChannel(channelName);
+        manager.sendMessageToChannel(channelName, jsonString.toStdString());
+    });
+
     // Copy actions
     if (!this->selection_.isEmpty())
     {

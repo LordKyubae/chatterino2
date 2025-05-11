@@ -37,6 +37,7 @@
 #include "widgets/splits/SplitInput.hpp"
 #include "widgets/splits/SplitOverlay.hpp"
 #include "widgets/Window.hpp"
+#include "singletons/WebSocketManager.hpp"
 
 #include <QApplication>
 #include <QDesktopServices>
@@ -1235,6 +1236,18 @@ void Split::openModViewInBrowser()
     {
         QDesktopServices::openUrl("https://twitch.tv/moderator/" +
                                   twitchChannel->getName());
+    }
+}
+
+void Split::clearObs()
+{
+    const auto channel = this->getChannel();
+
+    if (const auto *twitchChannel = dynamic_cast<TwitchChannel *>(channel.get()))
+    {
+        auto& manager = WebSocketManager::instance();
+        manager.connectToChannel(twitchChannel->getName().toStdString());
+        manager.sendMessageToChannel(twitchChannel->getName().toStdString(), R"({"type": "hide"})");
     }
 }
 
