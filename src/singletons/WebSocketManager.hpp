@@ -15,7 +15,7 @@ public:
     void connectToChannel(const std::string& channelName);
     void disconnectFromChannel(const std::string& channelName);
     void disconnectAll();
-    void sendMessageToChannel(const std::string& channelName, const std::string& message);
+    void sendMessageToChannel(const std::string& channelName, bool isBroadcaster, const std::string& message);
 
 private:
     WebSocketManager() = default;

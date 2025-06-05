@@ -42,8 +42,14 @@ void WebSocketManager::disconnectAll()
     clients_.clear();
 }
 
-void WebSocketManager::sendMessageToChannel(const std::string& channelName, const std::string& message)
+void WebSocketManager::sendMessageToChannel(const std::string& channelName, bool isBroadcaster, const std::string& message)
 {
+    if (!isBroadcaster)
+    {
+        std::cout << "[" << channelName << "] Tired to send message to OBS when User is not the Broadcaster." << '\n';
+        return;
+    }
+
     std::lock_guard<std::mutex> lock(mutex_);
     auto it = clients_.find(channelName);
     if (it != clients_.end())
