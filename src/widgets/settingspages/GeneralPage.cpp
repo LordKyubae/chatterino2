@@ -498,6 +498,8 @@ void GeneralPage::initLayout(GeneralPageView &layout)
 
     SettingWidget::lineEdit("Address", s.webSocketAddress, "ws://localhost:3000")->setTooltip("The WebSocket server to send chat data to.")->addTo(layout);
 
+    SettingWidget::checkbox("Allow Double Click", s.webSocketAllowDoubleClick)->addTo(layout);
+
     layout.addTitle("Messages");
 
     SettingWidget::checkbox("Separate with lines", s.separateMessages)

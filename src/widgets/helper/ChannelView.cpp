@@ -2865,9 +2865,25 @@ void ChannelView::mouseDoubleClickEvent(QMouseEvent *event)
     auto [wordStart, wordEnd] =
         layout->getWordBounds(hoverLayoutElement, relativePos);
 
-    this->doubleClickSelection_ = {SelectionItem(messageIndex, wordStart),
-                                   SelectionItem(messageIndex, wordEnd)};
+    this->doubleClickSelection_ = {SelectionItem(messageIndex, wordStart), SelectionItem(messageIndex, wordEnd)};
     this->setSelection(this->doubleClickSelection_);
+
+    if (getSettings()->webSocketAllowDoubleClick) {
+        auto& manager = WebSocketManager::instance();
+
+        const auto &messagePtr = layout->getMessagePtr();
+        const QString jsonString = QJsonDocument(messagePtr->toJson()).toJson(QJsonDocument::Compact);
+
+        const auto channel = this->channel_;
+        if (!channel) {
+            qDebug() << "No channel found";
+            return;
+        }
+        const std::string channelName{channel->getName().toUtf8()};
+
+        manager.connectToChannel(channelName);
+        manager.sendMessageToChannel(channelName, this->split_->getChannel()->isBroadcaster(), jsonString.toStdString());
+    }
 
     if (getSettings()->linksDoubleClickOnly)
     {
