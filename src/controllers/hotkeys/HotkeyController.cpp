@@ -375,6 +375,10 @@ void HotkeyController::addDefaults(std::set<QString> &addedHotkeys)
                             std::vector<QString>(), "reload emotes");
 
         this->tryAddDefault(addedHotkeys, HotkeyCategory::Split,
+                            QKeySequence("Ctrl+F10"), "clearObs",
+                            std::vector<QString>(), "clear obs");
+
+        this->tryAddDefault(addedHotkeys, HotkeyCategory::Split,
                             QKeySequence("Alt+x"), "createClip",
                             std::vector<QString>(), "create clip");
 

@@ -1247,7 +1247,7 @@ void Split::clearObs()
     {
         auto& manager = WebSocketManager::instance();
         manager.connectToChannel(twitchChannel->getName().toStdString());
-        manager.sendMessageToChannel(twitchChannel->getName().toStdString(), R"({"type": "hide"})");
+        manager.sendMessageToChannel(twitchChannel->getName().toStdString(), this->getChannel()->isBroadcaster(), R"({"type": "hide"})");
     }
 }
 

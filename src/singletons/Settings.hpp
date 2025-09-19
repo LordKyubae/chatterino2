@@ -267,6 +267,7 @@ public:
 
     /// Behaviour
     QStringSetting webSocketAddress = {"/websocket/address", "ws://localhost:3000"};
+    BoolSetting webSocketAllowDoubleClick = {"/websocket/allowDoubleClick", false};
 
     BoolSetting allowDuplicateMessages = {"/behaviour/allowDuplicateMessages",
                                           true};

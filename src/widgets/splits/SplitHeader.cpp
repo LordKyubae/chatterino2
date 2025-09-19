@@ -491,7 +491,9 @@ std::unique_ptr<QMenu> SplitHeader::createMainMenu()
 
         menu->addSeparator();
 
-        menu->addAction("Clear OBS",h->getDisplaySequence(HotkeyCategory::Split, "clearObs"),this->split_, &Split::clearObs);
+        if (this->split_->getChannel() != nullptr && this->split_->getChannel()->isBroadcaster()) {
+            menu->addAction("Clear OBS",h->getDisplaySequence(HotkeyCategory::Split, "clearObs"),this->split_, &Split::clearObs);
+        }
     }
 
     menu->addSeparator();

@@ -2567,23 +2567,28 @@ void ChannelView::addContextMenuItems(
     menu->raise();
 }
 
-void ChannelView::addMessageContextMenuItems(QMenu *menu, const MessageLayoutPtr &layout) {
-    menu->addAction("Send to OBS", [this, layout] {
-        auto& manager = WebSocketManager::instance();
+void ChannelView::addMessageContextMenuItems(QMenu *menu, const MessageLayoutPtr &layout)
+{
 
-        const auto &messagePtr = layout->getMessagePtr();
-        const QString jsonString = QJsonDocument(messagePtr->toJson()).toJson(QJsonDocument::Compact);
+    if (this->split_->getChannel() != nullptr && this->split_->getChannel()->isBroadcaster())
+    {
+        menu->addAction("Send to OBS", [this, layout] {
+            auto& manager = WebSocketManager::instance();
 
-        const auto channel = this->channel_;
-        if (!channel) {
-            qDebug() << "No channel found";
-            return;
-        }
-        const std::string channelName{channel->getName().toUtf8()};
+            const auto &messagePtr = layout->getMessagePtr();
+            const QString jsonString = QJsonDocument(messagePtr->toJson()).toJson(QJsonDocument::Compact);
 
-        manager.connectToChannel(channelName);
-        manager.sendMessageToChannel(channelName, jsonString.toStdString());
-    });
+            const auto channel = this->channel_;
+            if (!channel) {
+                qDebug() << "No channel found";
+                return;
+            }
+            const std::string channelName{channel->getName().toUtf8()};
+
+            manager.connectToChannel(channelName);
+            manager.sendMessageToChannel(channelName, this->split_->getChannel()->isBroadcaster(), jsonString.toStdString());
+        });
+    }
 
     // Copy actions
     if (!this->selection_.isEmpty())
@@ -2860,9 +2865,25 @@ void ChannelView::mouseDoubleClickEvent(QMouseEvent *event)
     auto [wordStart, wordEnd] =
         layout->getWordBounds(hoverLayoutElement, relativePos);
 
-    this->doubleClickSelection_ = {SelectionItem(messageIndex, wordStart),
-                                   SelectionItem(messageIndex, wordEnd)};
+    this->doubleClickSelection_ = {SelectionItem(messageIndex, wordStart), SelectionItem(messageIndex, wordEnd)};
     this->setSelection(this->doubleClickSelection_);
+
+    if (getSettings()->webSocketAllowDoubleClick) {
+        auto& manager = WebSocketManager::instance();
+
+        const auto &messagePtr = layout->getMessagePtr();
+        const QString jsonString = QJsonDocument(messagePtr->toJson()).toJson(QJsonDocument::Compact);
+
+        const auto channel = this->channel_;
+        if (!channel) {
+            qDebug() << "No channel found";
+            return;
+        }
+        const std::string channelName{channel->getName().toUtf8()};
+
+        manager.connectToChannel(channelName);
+        manager.sendMessageToChannel(channelName, this->split_->getChannel()->isBroadcaster(), jsonString.toStdString());
+    }
 
     if (getSettings()->linksDoubleClickOnly)
     {
